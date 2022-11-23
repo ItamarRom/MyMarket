@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}<title>Market Page</title>{% endblock %}
+
+{% block content %}
+<h1>Marketplace</h1>
+<form class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-2"
+    type="search" placeholder="Search by name..." name="q">
+    <button class="btn btn-outline-success my-2 my-sm-0"
+            type="submit">Search</button>
+</form>
+  <table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <!-- Your Columns HERE -->
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Sold by</th>
+<!--            <th scope="col">Options</th>-->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+        {%for item in items%}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td style="font-weight: bold;">{{ item.price }}</td>
+            <td><h5><a href="/user/{{item.owner.username}}" class="badge badge-pill badge-secondary">{{ item.owner.username }}</a></h5></td>
+            <td>
+                <button class="btn btn-outline btn-primary">More Info</button>
+            {% if item.user_id == current_user.id %}
+                <a href="/item/delete/{{ item.id }}" class="btn btn-outline btn-danger">Delete</a>
+            {% endif %}
+<!--                <button class="btn btn-outline btn-success">Purchase this item</button>-->
+            </td>
+        {% endfor %}
+        </tr>
+    </tbody>
+  </table>
+<br>
+<button class="btn btn-outline-info" onclick="sellItem()">Sell an item</button>
+<br>
+<br>
+
+
+    <form action="" method="post" novalidate id="itemForm" style="display: none">
+        {{ form.hidden_tag() }}
+        <h1>Sell Item</h1>
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}
+            {% for error in form.name.errors %}
+            <span style="color : red">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.price.label }}<br>
+            {{ form.price(size=32) }}
+            {% for error in form.price.errors %}
+            <span style="color : red">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{form.submit(class_="btn btn-outline-info")}}</p>
+    </form>
+
+<script>
+function sellItem() {
+  var x = document.getElementById("itemForm");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+
+{% endblock %}
+
