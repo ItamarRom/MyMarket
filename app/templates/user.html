@@ -14,9 +14,47 @@
     </table>
     <hr>
 <h2>Items for sale:</h2>
-    {% for item in items %}
-    <p>
-    {{ item.name }} <b>{{ item.price }}</b>
-    </p>
-    {% endfor %}
+ <table class="table table-hover table-striped">
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+        {%for item in items%}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td style="font-weight: bold;">{{ item.price }}</td>
+            <td><h5><a href="/user/{{item.owner.username}}" class="badge badge-pill badge-secondary">{{ item.owner.username }}</a></h5></td>
+            <td>
+                <button class="btn btn-outline btn-primary">More Info</button>
+            {% if item.user_id == current_user.id %}
+                <a href="/item/delete/{{ item.id }}" class="btn btn-outline btn-danger">Delete</a>
+            {% endif %}
+<!--                <button class="btn btn-outline btn-success">Purchase this item</button>-->
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+ </table>
+    <table>
+        {% if comments %}
+            {% for comment in comments %}
+            <tr valign="top">
+                <td><img src="{{ comment.author.avatar(65) }}"></td>
+                <td><b>{{ comment.author.username }}</b> says:<br>{{ comment.body }}<br><br>{{ moment(comment.timestamp).fromNow() }}<hr></td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+<br>
+{% if current_user.id != user.id %}
+    <h2>Leave a comment :</h2>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.body(cols="35", rows="5") }}
+                {% for error in form.body.errors %}
+                <span style="color : red">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(class_="btn btn-primary") }}</p>
+        </form>
+{% endif %}
 {% endblock %}
