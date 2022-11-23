@@ -48,7 +48,7 @@ class Item(db.Model):
     name = db.Column(db.String(64), index=True, unique=True)
     price = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    comments = db.relationship('Comment', backref='c_item', lazy='dynamic')
+    # comments = db.relationship('Comment', backref='c_item', lazy='dynamic')
 
     def __repr__(self):
         return f'<item {self.name}'
@@ -60,7 +60,7 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     Tuser = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
+    # item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
 
     def __repr__(self):
         return f'<Comment: {self.body}'
