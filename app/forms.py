@@ -1,6 +1,6 @@
 # importing all the libraries we want to use for Form creation
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField,IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField,IntegerField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 import re
@@ -85,3 +85,6 @@ class ItemForm(FlaskForm):
     submit = SubmitField('Sell')
 
 
+class CommentForm(FlaskForm):
+    body = TextAreaField('body', validators=[DataRequired(), Length(max=264)])
+    submit = SubmitField('submit')

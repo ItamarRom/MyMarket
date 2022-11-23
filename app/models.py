@@ -58,6 +58,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    Tuser = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
 

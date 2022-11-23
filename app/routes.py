@@ -1,8 +1,8 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegisterForm, ItemForm
+from app.forms import LoginForm, RegisterForm, ItemForm, CommentForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Item
+from app.models import User, Item, Comment
 from werkzeug.urls import url_parse
 from datetime import datetime, timedelta
 
@@ -23,12 +23,22 @@ def index():
     return render_template('index.html', title='Home')
 
 
-@app.route('/user/<username>')
+@app.route('/user/<username>', methods=['GET', 'POST'])
 @login_required
 def user(username):
+    form = CommentForm()
     user = User.query.filter_by(username=username).first_or_404()
     items = Item.query.filter_by(user_id=user.id)
-    return render_template('user.html', items=items,title=user.username, user=user)
+    if request.method == "POST":
+        comment = Comment(body=form.body.data, user_id=current_user.id, Tuser=username)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('user', username=username))
+
+
+    comments = Comment.query.filter_by(Tuser=username)
+
+    return render_template('user.html', items=items,title=user.username, form=form, user=user, comments=comments)
 
 
 @app.route('/login', methods=['GET', 'POST'])
