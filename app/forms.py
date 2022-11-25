@@ -72,7 +72,7 @@ class RegisterForm(FlaskForm):
         password_ok = not (length_error or digit_error or uppercase_error or lowercase_error or symbol_error)
 
         if not password_ok:
-            raise ValidationError('Password must contain at least 1 Upper and lower charecter , 1 special symbol and be at least 7 charecters long')
+            raise ValidationError('Password must contain at least 1 Upper and lower charecter , 1 special symbol and be at least 8 charecters long')
 
 
 
